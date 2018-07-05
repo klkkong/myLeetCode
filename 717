@@ -1,5 +1,6 @@
 # 1-bit and 2-bit Characters
 # Tags: array, easy
+# 遇到1就跳过
 
 class Solution {
 public:
