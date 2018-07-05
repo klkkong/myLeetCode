@@ -1,4 +1,5 @@
 # 1-bit and 2-bit Characters
+# Tags: array, easy
 
 class Solution {
 public:
