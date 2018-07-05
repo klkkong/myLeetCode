@@ -1,0 +1,20 @@
+# 1-bit and 2-bit Characters
+
+class Solution {
+public:
+    bool isOneBitCharacter(vector<int>& bits) {
+        int length=bits.size();
+        int i;
+        for(i=0;i<length;i++)
+        {
+            if(!bits[i])
+                continue;
+            i++;
+            if(i==length-1)
+                break;
+        }
+        return (i==length?true:false);
+    }
+};
+
+result: beat 100% people
