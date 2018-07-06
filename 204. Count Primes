@@ -27,6 +27,8 @@ public:
 
 
 # 2. my solution
+# 这套质数的计算方法的重点有两个：一是判断num是否是质数，通过判断num是否能被质数p整除，并且质数p满足p*p<=num.二是num的递增方式是num+=2,因为质数必是奇数
+
 class Solution {
 public:
     int countPrimes(int n) {
