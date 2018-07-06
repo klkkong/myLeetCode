@@ -1,0 +1,30 @@
+# House Robber
+# my solution
+# easy, DP
+# 动态规划还是要分析它的子问题。抽出中间的一个状态（即子问题）：小偷到第i个房子时，可以选择偷或者不偷。用res[i]表示小偷到第i个房子的最佳收益。
+# 如果小偷偷第i个房子，那么第i-1个房子一定不能偷，因此状态转移方程一定是比较这两者的关系，得到最大值：res[i]=max(nums[i]+res[i-2],res[i-1])
+# 如果还不明白，可以参考爬梯子问题：n阶台阶，每次可以上1步or2步，问一共有多少种方法能上完n阶台阶？
+
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        int size=nums.size();
+        if(size==0)
+            return 0;
+        if(size==1)
+            return nums[0];
+        if(size==2)
+            return max(nums[0],nums[1]);
+        int* res=new int[size];
+        int i;
+        res[0]=nums[0];
+        res[1]=max(nums[0],nums[1]);
+        for(i=2;i<size;i++)
+        {
+            res[i]=max(res[i-1],res[i-2]+nums[i]);
+        }
+        return res[i-1];
+    }
+};
+
+result: beat 100%
