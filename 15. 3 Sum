@@ -51,6 +51,8 @@ public:
 
 # 2: review1803
 # sort first
+# 首先对数组预处理，对vector排序并防止无穷个0这样的情况；最后需要对res中的元素剔除掉重复元素，使用isUnique函数
+
 class Solution {
 public:
     bool isUnique(vector<int>& tv,vector<vector<int>>& res)
@@ -63,8 +65,25 @@ public:
         }
         return true;
     }
-    vector<vector<int>> threeSum(vector<int>& nums) {
+    void removeDup(vector<int>& nums) {
         sort(nums.begin(),nums.end());
+        int size=nums.size();
+        if(size<4)
+            return;
+        vector<int>::iterator it;
+        for(it=nums.begin();it!=nums.end();)
+        {
+            if(*it==*(it+3))
+                it=nums.erase(it);
+            else
+                it++;
+            if(it==nums.end()-3)
+                break;
+        }
+        return;
+    }
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        removeDup(nums);
         vector<vector<int>> res;
         int size=nums.size();
         for(int i=0;i<size-1;i++)
@@ -97,5 +116,51 @@ public:
             }
         }
         return res;
+    }
+};
+
+# result: beat 1%
+
+# 3: good solution by other
+# 仍是建立在先排序然后使用j=i+1 & k=size-1 & while(j<k)，但是三个while的使用避免了重复元素，为什么是三个while：因为是三个数相加
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> result;
+        sort(nums.begin(),nums.end());
+        
+        for(int i=0;i<nums.size();i++)
+        {
+            int target = -nums[i];
+            int front = i+1;
+            int back = nums.size()-1;
+            
+            while(front<back)
+            {
+                int sum=nums[front]+nums[back];
+                if(sum<target)
+                {
+                    front++;
+                }
+                else if(sum>target)
+                {
+                    back--;
+                }
+                else
+                {
+                    vector<int> sum3(3,0);
+                    sum3[0] = nums[i];
+                    sum3[1] = nums[front];
+                    sum3[2] = nums[back];
+                    result.push_back(sum3);
+                    while(front<nums.size()-1 && nums[front] == sum3[1])    front++; // (1)
+                    while(back>1 && nums[back] == sum3[2])     back--; // (2)
+                }
+            }
+            
+            while(i<nums.size()-2 && nums[i]==nums[i+1])    i++; // (3)
+        }
+        return result;
     }
 };
