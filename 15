@@ -1,0 +1,101 @@
+# 3 Sum
+# a + b + c = target = 0
+
+# 1: my solution
+class Solution {
+public:
+    bool isUnique(vector<int>& tv,vector<vector<int>>& res)
+    {
+        int size=res.size();
+        for(int i=0;i<size;i++)
+        {
+            if(tv==res[i])
+                return false;
+        }
+        return true;
+    }
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> res;
+        int size=nums.size();
+        for(int i=0;i<size;i++)
+        {
+            for(int j=0;j<size;j++)
+            {
+                if(i==j)
+                    continue;
+                int tmp=0-nums[i]-nums[j];
+                vector<int> tv;
+                tv.push_back(nums[i]);
+                tv.push_back(nums[j]);
+                for(int k=0;k<size;k++)
+                {
+                    if(i==k||j==k)
+                        continue;
+                    if(tmp==nums[k])
+                    {
+                        tv.push_back(nums[k]);
+                        sort(tv.begin(),tv.end());
+                        if(isUnique(tv,res))
+                            res.push_back(tv);                        
+                        break;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+};
+
+# result: Time limit exceeded
+
+
+# 2: review1803
+# sort first
+class Solution {
+public:
+    bool isUnique(vector<int>& tv,vector<vector<int>>& res)
+    {
+        int size=res.size();
+        for(int i=0;i<size;i++)
+        {
+            if(tv==res[i])
+                return false;
+        }
+        return true;
+    }
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        vector<vector<int>> res;
+        int size=nums.size();
+        for(int i=0;i<size-1;i++)
+        {
+            int j=i+1;
+            int k=size-1;
+            
+            while(j<k)
+            {
+                int sum_2 = nums[i]+nums[j];
+                if(sum_2+nums[k]<0)
+                {
+                    j++;
+                }
+                else if(sum_2+nums[k]>0)
+                {
+                    k--;
+                }
+                else
+                {
+                    vector<int> tmp;
+                    tmp.push_back(nums[i]);
+                    tmp.push_back(nums[j]);
+                    tmp.push_back(nums[k]);
+                    if(isUnique(tmp,res))
+                        res.push_back(tmp);
+                    j++;
+                    k--;
+                }
+            }
+        }
+        return res;
+    }
+};
