@@ -1,0 +1,53 @@
+# Count Primes
+# 
+
+# 1. solution by other
+class Solution {
+public:
+    int countPrimes(int n) {
+        if (n <= 2) return 0;
+        
+        bool * notPrimes = new bool[n];
+        memset(notPrimes, 0, sizeof(bool) * n);
+        int ret = 1;
+        long nn = n;
+        notPrimes[0] = true;
+        notPrimes[1] = true;
+        for(int i = 3; i < nn; i += 2) {
+            if (notPrimes[i] == false) {
+                ret ++;
+                for(long j = i; j * i < nn; j += 2) {
+                    notPrimes[j * i] = true;
+                }
+            }
+        }      
+        return ret;
+    }
+};
+
+
+# 2. my solution
+class Solution {
+public:
+    int countPrimes(int n) {
+        if(n<3) return 0;
+        list<int> pm(1,2);
+        int num=3;
+        while(num<n)
+        {
+            bool isPrime=true;
+            for(auto it=pm.begin();it!=pm.end() && (*it)*(*it)<=num;it++)
+            {
+                if(num%(*it)==0)
+                    isPrime=false;
+            }
+            if(isPrime)
+                pm.push_back(num);
+            
+            num+=2;
+        }
+        return pm.size();
+    }
+};
+
+# result: beat 6%
