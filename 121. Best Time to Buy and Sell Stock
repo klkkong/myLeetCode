@@ -1,0 +1,32 @@
+# DP, easy
+
+# 1. my solution
+# 每个值和最小值比较，更新最小值；每个值再和最小值相减得到profit,更新max profit
+# 这也符合DP的思想：中间某个状态，即第i天的max profit = max(dp[i-1],prices[i]-minv)
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int size=prices.size();
+        if(size==0) return 0;
+        int res=0;
+        int minv=prices[0];
+        for(int i=1;i<size;i++)
+        {
+            minv=min(minv,prices[i]);
+            res=max(res,prices[i]-minv);
+        }
+        return res;
+    }
+};
+
+# 2. DP solution
+int maxProfit(int[] prices) {
+    if (prices.length == 0) return 0;
+    int[] dp = new int[prices.length];
+    int minPrice = prices[0];
+    for (int i = 1; i < prices.length; i++) {
+        dp[i] = Math.max(dp[i - 1], prices[i] - minPrice);
+        minPrice = Math.min(minPrice, prices[i]);
+    }
+    return dp[dp.length - 1];
+}
