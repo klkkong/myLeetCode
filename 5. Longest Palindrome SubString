@@ -1,0 +1,168 @@
+# medium, DP
+
+# 1. Brute Solution
+
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        if(is_palindromic(s)){
+            return s;
+        }else{            
+            int i = 0;
+            int j = s.size();
+            int max_len = 0;
+            string result = "";
+            for(; i < s.size()-1; i++){
+                for(j = s.size(); j >i; j--){                    
+                    string s1 = s.substr(i,j-i);//注意substr函数，第二个参数指的是以i为起点，取长度j-i的字符串                   
+                    if(is_palindromic(s1)){
+                        if (s1.size() > max_len){
+                            max_len = s1.size();
+                            result = s1;                            
+                        }
+                    }
+                }               
+            }
+            return result;           
+        }
+    }
+    bool is_palindromic(string s){
+        int i = 0;
+        int j = s.size()-1;
+        while(i <=j){
+            if(s[i]!= s[j]){
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }
+};
+
+# 2. my DP solution
+# 状态转移方程：dp[i,j] = ( dp[i+1,j-1] && S[i]==S[j] )，边界条件：dp[i,i]=true, dp[i,i+1]=( S[i]==S[j] )
+
+class Solution {
+public:
+    bool dps(int l,int r,int size,string s,bool* &dp,bool* &vis)
+    {
+        int pos=l*size+r;
+        if(l==r)
+        {
+            dp[pos]=true;
+            vis[pos]=true;
+            return dp[pos];
+        }
+        if(l==r-1)
+        {
+            dp[pos]=(s[l]==s[r]);
+            vis[pos]=true;
+            return dp[pos];
+        }
+        int tmp=(l+1)*size+(r-1);
+        if(vis[tmp])
+        {
+            return (s[l]==s[r]) && dp[tmp];
+        }
+        else
+        {
+            dp[pos]=(s[l]==s[r])&&dps(l+1,r-1,size,s,dp,vis);
+            vis[pos]=true;
+            return dp[pos];
+        }
+    }
+    string longestPalindrome(string s) {
+        int size=s.length();
+        if(size==0) return "";
+        if(size==1) return s;
+        bool* dp=new bool[size*size];
+        memset(dp,0,sizeof(bool)*size*size);
+        bool* vis=new bool[size*size];
+        memset(vis,0,sizeof(bool)*size*size);
+        int maxlen=0;
+        for(int i=0;i<size;i++)
+        {
+            for(int j=0;j<size;j++)
+            {
+                if(i>j)
+                    continue;
+                int pos=i*size+j;
+                dp[pos]=dps(i,j,size,s,dp,vis);
+                if(dp[pos])
+                    maxlen=max(j-i+1,maxlen);
+            }
+        }
+        for(int i=0;i<size*size;i++)
+        {
+            if(dp[i])
+            {
+                int left=i/size,right=i%size;
+                if(right-left+1==maxlen)
+                    return s.substr(left,right-left+1);
+            }
+        }
+        
+        return "";        
+    }
+};
+
+result: 87/94, "f...fg...g" ---> Time Limit Exceeded
+
+# 3. Expand Around Center
+# TC: O(n^2), SC: O(1)
+class Solution {
+public:
+string longestPalindrome(string s) {
+    if(s.length()==0||s.length()==1)return s;
+    string max=""+s[0];
+    for(int i=0;i< s.length()-1; i++){
+        string first=helper(s, i, i);
+        if(first.length() > max.length())max=first;
+        
+        string second=helper(s, i, i+1);
+        if(second.length() > max.length())max=second;
+    }
+    return max;
+}
+
+string helper(string s, int left, int right){
+    while(left >=0 && right <s.length() && s[right]==s[left]){
+        left--;
+        right++;
+    }
+    return s.substr(left+1, right-1-left);
+}
+
+# 4. DP
+# result: 70/94 Wrong answer
+# 我的理解是dp[i,j]需要知道dp[i+1,j-1]，那么就会一层层的剥下去，所以顺序很重要，也就是要先知道dp[i+1,j-1]，下面这种解法提供了一个比较合理的顺序
+
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        int size=s.length();
+        if(size==0 || size==1) return s;
+        bool** dp=new bool*[size];
+        for(int i=0;i<size;i++)
+        {
+            dp[i]=new bool[size];
+        }
+        int start=0,end=0,maxlen=0;
+        for(int i=0;i<size;i++)
+        {
+            for(int j=0;j<=i;j++)
+            {
+                if(s[i]==s[j] && (i-j<=2 || dp[j+1][i-1]))
+                    dp[j][i]=true;
+                if(dp[j][i] && i-j+1>maxlen)
+                {
+                    maxlen=i-j+1;
+                    start=j;
+                    end=i;
+                }
+            }
+        }
+        return s.substr(start,end-start+1);
+    }
+};
