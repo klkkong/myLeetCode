@@ -147,13 +147,14 @@ public:
         for(int i=0;i<size;i++)
         {
             dp[i]=new bool[size];
+            memset(dp[i],0,sizeof(bool)*size);
         }
         int start=0,end=0,maxlen=0;
         for(int i=0;i<size;i++)
         {
-            for(int j=0;j<=i;j++)
+            for(int j=0;j<=i;j++) // 这样能保证计算dp[j,i]时，dp[j+1,i-1]已经计算过
             {
-                if(s[i]==s[j] && (i-j<=2 || dp[j+1][i-1]))
+                if(s[i]==s[j] && (i-j<=2 || dp[j+1][i-1])) // 这样的顺序能保证数组dp下标不越界
                     dp[j][i]=true;
                 if(dp[j][i] && i-j+1>maxlen)
                 {
