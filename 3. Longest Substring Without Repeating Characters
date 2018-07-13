@@ -17,22 +17,27 @@ public:
             {
                 if(hm.count(s[j])==0)
                 {
-                    hm[s[j]]++;
+                    hm[s[j]]=1;
                     j++;
                 }
                 else
                 {
-                    i++;
+                    
                     break;
                 }
             }
             int hmsize=hm.size();
             maxlen=max(maxlen,hmsize);
-            while(i<len-1 && s[i]==s[i+1])
+            while(j<len-1 && s[j]==s[j+1])
+            {
+                j++;
+                i=j;
+            }
+            if(i!=j)
                 i++;
         }
         return maxlen;
     }
 };
 
-result: TLE
+result: 
