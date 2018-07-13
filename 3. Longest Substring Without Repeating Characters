@@ -1,0 +1,38 @@
+# Given a string, find the length of the longest substring without repeating characters.
+# Note that the answer must be a substring, not a subsequence.
+# medium, hash map, two pointers
+
+# 1. my solution
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int len=s.length();
+        if(len<2) return len;
+        int i=0,maxlen=0;
+        while(i<len)
+        {
+            unordered_map<char,int> hm;
+            int j=i;
+            while(j<len)
+            {
+                if(hm.count(s[j])==0)
+                {
+                    hm[s[j]]++;
+                    j++;
+                }
+                else
+                {
+                    i++;
+                    break;
+                }
+            }
+            int hmsize=hm.size();
+            maxlen=max(maxlen,hmsize);
+            while(i<len-1 && s[i]==s[i+1])
+                i++;
+        }
+        return maxlen;
+    }
+};
+
+result: TLE
