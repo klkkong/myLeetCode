@@ -1,0 +1,52 @@
+# medium, linked list
+# 1. my solution
+# 思路：利用readList将输入链表翻译成int，再结合dummy node
+# 此方法局限性为只能处理一定大小的数
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int readList(ListNode* l) {
+        int i=0,res=0;
+        while(l)
+        {
+            int tmp=l->val;
+            res+=tmp*pow(10,i);
+            i++;
+            l=l->next;
+        }
+        return res;
+    }
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        if(l1->val==0) return l2;
+        if(l2->val==0) return l1;
+        int tmp1=readList(l1);
+        int tmp2=readList(l2);
+        int tmp3=tmp1+tmp2;
+
+        ListNode *dummy=new ListNode(0);
+        ListNode* curr=dummy;
+        while(1)
+        {
+            int r=tmp3%10;
+            tmp3=tmp3/10;
+            ListNode* t=new ListNode(0);
+            t->val=r;
+            t->next=NULL;
+            curr->next=t;
+            curr=curr->next;
+            if(rem==0) break;
+        }
+        return dummy->next;
+    }
+};
+
+# result: Wrond answer: [9] + [1,9,9,9,9,9,9,9,9,9]
+
