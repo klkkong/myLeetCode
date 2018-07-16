@@ -13,3 +13,14 @@ ListNode* reverseList(ListNode* head) {
     return prev;
 }
 
+
+# 递归算法
+# 递归问题就考虑河内塔。把问题分步：首先假设要逆序i号结点，i号结点后面已经逆序完成。然后逆序i号结点。方法是 i->next->next=i
+ListNode* reverseList(ListNode* head) {
+    if (!head || !head->next) return head;
+    ListNode* p = reverseList(head->next);
+    head->next->next = head;
+    head->next = NULL;
+    return p;
+}
+
