@@ -1,0 +1,151 @@
+# medium, math
+
+# good solution 
+# 此题不难，重在逻辑。该解法的逻辑是：从头开始遍历，遇到空格continue，遇到'-'后，遍历剩下的部分，一旦不是数字就break；如果遇到的是'+' or 'num'
+# 则和上一种情况一样；遇到剩下的都break
+# 此解法有两个亮点：1. 定义 long long result 而不是 int result; 2. 更新result: result = result * 10 + str[i] - '0'
+
+class Solution {
+public:
+    int myAtoi(string str) {
+        long long result = 0;
+        for (int i = 0; i < str.size(); i++) {
+            if (str[i] == ' ') {
+                continue;
+            }
+            if (str[i] == '-') {
+                // try to parse a negtive number
+                if (i + 1 >= str.size() || (str[i + 1] < '0' || str[i + 1] > '9')) {
+                    break;
+                }
+                for (int j = i + 1; j < str.size(); j++) {
+                    if (str[j] < '0' || str[j] > '9') {
+                        break;
+                    }
+                    result = result*10 + (str[j] - '0');
+                    if (result > 2147483648) {
+                        return -2147483648;
+                    }
+                }
+                return -result;
+            } else if (str[i] == '+' || (str[i] >= '0' && str[i] <= '9')) {
+                // parse a positive number
+                if (str[i] == '+') {
+                  if (i + 1 >= str.size() || str[i + 1] < '0' || str[i + 1] > '9') {
+                      break;
+                  }
+                  i = i + 1;
+                }
+                result = str[i] - '0';
+                for (int j = i + 1; j < str.size(); j++) {
+                    if (str[j] < '0' || str[j] > '9') {
+                        break;
+                    }
+                    result = result*10 + (str[j] - '0');
+                    if (result > 2147483647) {
+                        return 2147483647;
+                    }
+                }
+                return result;
+            } else {
+                break;
+            }
+        }
+        return result;
+    }
+};
+
+# my solution
+# 逻辑混乱
+
+class Solution {
+public:
+    bool outMax(string res, bool& iso)
+    {
+        if(res[0]=='+') res.erase(0,1);      
+        int len=res.length();
+        while(res[0]=='0')
+            res.erase(0,1);  
+        if(res.empty()) iso=true;
+        
+        len=res.length();
+        if(len>10) return false;
+        if(len==10)
+        {
+            if(res[0]-'2'>0) return false;
+            if(res[0]=='2')
+            {
+                res.erase(0,1);
+                return atoi(res.c_str())<147483647;
+            }
+        }
+        return true;
+    }
+    bool outMin(string res, bool& iso)
+    {
+        res.erase(0,1);
+        int len=res.length();
+        while(res[0]=='0')
+            res.erase(0,1);
+        
+        if(res.empty()) iso=true;
+        len=res.length();
+        if(len>10) return false;
+        if(len==10)
+        {
+            if(res[0]-'2'>0) return false;
+            if(res[0]=='2')
+            {
+                res.erase(0,1);
+                return atoi(res.c_str())<147483648;
+            }
+        }
+        return true;
+    }
+    int myAtoi(string str) {
+        int len=str.length();
+        if(len==0) return 0;
+        int i=0;
+        while(str[i]==' ' && i<len)
+        {
+            i++;
+        }
+        if(i==len) return 0;
+        
+        bool isAl=false,isOpM=false,isOpA=false,isNu=false;
+        string res;
+        if(isalpha(str[i]))
+            return 0;
+        else if(str[i]=='-')
+        {
+            isOpM=true;
+            res=res+str[i++];
+        }
+        else if(str[i]=='+')
+        {
+            isOpA=true;
+            res=res+str[i++];
+        }
+        
+        while(isdigit(str[i]) && i<len)
+        {
+            res=res+str[i++];
+        }
+        
+        bool iso=false;
+        if(isOpM)
+        {
+            if(!outMin(res,iso))
+                return INT_MIN;
+        }
+        else
+        {
+            if(!outMax(res,iso))
+                return INT_MAX;
+        }
+        
+        return iso?0:atoi(res.c_str());
+    }
+};
+
+result: beat 99%
