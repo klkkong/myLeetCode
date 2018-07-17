@@ -1,0 +1,23 @@
+# two pointers, array
+
+
+# my solution
+# 思路：v = min(h[j], h[i]) * (j - i) ----> 木桶理论
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        int res=0;
+        for(int i=0;i<height.size()-1;i++)
+        {
+            for(int j=i+1;j<height.size();j++)
+            {
+                int v=min(height[i],height[j]) * (j-i);
+                res=max(res,v);
+            }
+        }
+        return res;
+    }
+};
+
+result: TLE: 15000, 14999, ..., 2, 1
+
