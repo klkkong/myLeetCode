@@ -57,6 +57,14 @@ public:
 
 # my solution
 # 逻辑混乱
+# 思路：找到第一个非空格的字符，记录下它的类型（plus, minus, alpha），如果是正负号则开始遍历下个字符。记录下字符，此时仍然是字符串。
+# 判断是否超出了上下界：首先除去零打头的部分。然后将剩下的字符串转化为数值（atoi），确定是否超出上下界。
+# 用到的函数：
+# 删除string的第一个字符：res.erase(0,1);
+# 取string从index到末尾的子串：res.substr(1);
+# 将C++字符串转化为指针：res.c_str();
+# 在string末尾添加元素：res=res+'a'; (不能用res+='a')
+# 函数 isdigit(char), isalpha(char)
 
 class Solution {
 public:
