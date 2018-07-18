@@ -1,0 +1,125 @@
+# easy, linked list, two pointers
+
+# 1. my solution
+# 思路：题目是给定一个链表判断是否是回文，并不是说判断该链表是否包含回文。那么可以判断链表正序和逆序是否相等
+# 步骤：先复制一份链表，然后逆序，然后对比两个链表
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) { // 逆序
+        ListNode* prev=NULL;
+        while(head)
+        {
+            ListNode* tmp=head->next;
+            head->next=prev;
+            prev=head;
+            head=tmp;
+        }
+        return prev;
+    }
+    bool isPalindrome(ListNode* head) {
+        if(!head || !head->next) return true;
+        ListNode* cpyHead=new ListNode(0);
+        ListNode *curr=cpyHead,*curHead=head;
+        while(curHead)                      // 复制链表
+        {
+            curr->val=curHead->val;
+            curr->next=NULL;
+            if(curHead->next)
+            {
+                ListNode* tmp=new ListNode(0);
+                curr->next=tmp;
+                curr=curr->next;
+            }
+            curHead=curHead->next;
+        }
+        ListNode* newHead=reverseList(cpyHead);
+        while(head)                         // 判断
+        {
+            if(head->val!=newHead->val)
+                return false;
+            head=head->next;
+            newHead=newHead->next;
+        }
+        return true;
+    }
+};
+
+# result: beat 57%
+
+
+# 2. two pointers
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        if(head==NULL||head->next==NULL)
+            return true;
+        ListNode* slow=head;
+        ListNode* fast=head;
+        while(fast->next!=NULL&&fast->next->next!=NULL){
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        slow->next=reverseList(slow->next);
+        slow=slow->next;
+        while(slow!=NULL){
+            if(head->val!=slow->val)
+                return false;
+            head=head->next;
+            slow=slow->next;
+        }
+        return true;
+    }
+    ListNode* reverseList(ListNode* head) {
+        ListNode* pre=NULL;
+        ListNode* next=NULL;
+        while(head!=NULL){
+            next=head->next;
+            head->next=pre;
+            pre=head;
+            head=next;
+        }
+        return pre;
+    }
+};
+
+
+# 3. Use stack
+# 这个算法思路是好的，并且只压入一半的数
+class Solution {
+    bool isPalindrome(ListNode* head) {
+        ListNode* temp = head;
+        int length = 0;
+        while(temp){
+            length++;
+            temp = temp->next;
+        }
+        stack<int> mystack;
+        
+        for(int i=0; i<length/2; i++){
+            mystack.push(head->val);
+            head = head->next;
+        }
+        int start;
+        if(length%2==0)
+            start = length/2;
+        else{
+            start = length/2+1;
+            head = head->next;
+        }
+        for(int i=start; i<length; i++){
+            if(head->val!=mystack.pop()) return false;
+            head = head->next;
+        }
+        return true;
+        
+    }
+}
