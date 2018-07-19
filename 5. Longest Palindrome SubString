@@ -167,3 +167,52 @@ public:
         return s.substr(start,end-start+1);
     }
 };
+
+
+# 5. DP
+# my accepted solution
+# 思路和4一样，dp[i,j]需要知道dp[i+1,j-1]，顺序采用for(i=0;i<size;i++) { for(j=i-1;j>=0;j--) {} }，同样保证[0,i-1]之间内的任意dp值都已知
+
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        int size=s.size();
+        bool **dp=new bool*[size];
+        for(int i=0;i<size;i++)
+        {
+            dp[i]=new bool[size];
+            memset(dp[i],0,sizeof(bool)*size);
+        }
+        
+        int l=0,r=0,maxlen=0;
+        for(int i=0;i<size;i++)
+        {
+            dp[i][i]=true;
+            for(int j=i-1;j>=0;j--)
+            {
+                if(j==i-1)
+                {
+                    if(s[j]==s[i])
+                        dp[j][i]=true;               
+                }
+                else 
+                {
+                    if(dp[j+1][i-1] && s[j]==s[i])
+                        dp[j][i]=true;
+                }
+                if(dp[j][i])
+                {
+                    if(i-j+1>maxlen)
+                    {
+                        maxlen=i-j+1;
+                        r=i;
+                        l=j;
+                    }
+                }
+            }
+        }
+        return s.substr(l,r-l+1);
+    }
+};
+
+# result: beat 37%
