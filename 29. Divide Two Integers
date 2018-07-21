@@ -30,8 +30,30 @@ int divide(int dividend, int divisor) {
             res++;
         }
         return oppo?0-res:res;
-    }
+}
     
-    # result: 14/900, TLE, input: INT_MIN, 2
-    
+# result: 14/900, TLE, input: INT_MIN, 2
+
+
+# 2. 二进制移位 + long long 类型
+# 1<<2     1的二进制为 0000 0001   左移2位  0000 0100. 每左移一位就是*2
+
+int divide(int dividend, int divisor) {
+        if (!divisor || (dividend == INT_MIN && divisor == -1))
+            return INT_MAX;
+        int sign = ((dividend < 0) ^ (divisor < 0)) ? -1 : 1; // 异或：相同为0，不同为1
+        long long dvd = labs(dividend);
+        long long dvs = labs(divisor);
+        int res = 0;
+        while (dvd >= dvs) { 
+            long long temp = dvs, multiple = 1;
+            while (dvd >= (temp << 1)) {
+                temp <<= 1;
+                multiple <<= 1;
+            }
+            dvd -= temp;
+            res += multiple;
+        }
+        return sign == 1 ? res : -res; 
+}
     
