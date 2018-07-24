@@ -1,0 +1,25 @@
+# medium, binary search
+# [4,5,6,7,0,1,2]  target=3, return -1; target=0, return 4
+# 为了方便，我把4567叫做“大头”，012叫做“小头”，上面例子明显是大头占大多数
+
+# 1. Rotated sorted array一定只有两种情况，大头占优和小头占优。如果target处在大头占优的大头中或者处在小头占优的小头中，则就按普通的binary search
+# 处理，否则就将nums[mid]设为inf
+
+int search(vector<int>& nums, int target) {
+    int lo = 0, hi = nums.size();
+    while (lo < hi) {
+        int mid = (lo + hi) / 2;
+        
+        double num = (nums[mid] < nums[0]) == (target < nums[0]) //这行确定target是否完全在小头或者完全在大头
+                   ? nums[mid]
+                   : target < nums[0] ? -INFINITY : INFINITY;
+                   
+        if (num < target)
+            lo = mid + 1;
+        else if (num > target)
+            hi = mid;
+        else
+            return mid;
+    }
+    return -1;
+}
