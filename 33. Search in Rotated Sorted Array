@@ -23,3 +23,37 @@ int search(vector<int>& nums, int target) {
     }
     return -1;
 }
+
+
+# 2. Accepted solution
+# 思路：在循环中，首先确定是大头占优还是小头占优；然后确定target是否存在于占优的那个区间里
+# 细节：(1) while循环中的等号；(2) 42行的等号，处理数组只有两个元素的情况；(3) 44和51行的等号，应对target = nums[left]的情况
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        if(nums.size()==0) return -1;
+        int left=0,right=nums.size()-1;
+        while(left<=right)
+        {
+            int mid=left+(right-left)/2;
+            if(nums[mid]==target)
+                return mid;
+            if(nums[mid]>=nums[left]) // 大头占优
+            {
+                if(target<nums[mid] && target>=nums[left])
+                    right=mid-1;
+                else
+                    left=mid+1;
+            }
+            else // 小头占优
+            {
+                if(target>nums[mid] && target<=nums[right])
+                    left=mid+1;
+                else
+                    right=mid-1;
+            }
+        }
+        return -1;
+    }
+};
