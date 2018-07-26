@@ -1,0 +1,43 @@
+# binary search, medium
+# 
+# 1. my accepted solution
+# 思路：3^5,5个数相乘，拿出一个放到res里，然后剩下的偶数个数两两相乘
+class Solution {
+public:
+    double myPow(double x, int n) {
+        if(x==0) return 0;
+        if(n==0) return 1;
+        double res=1;
+        if(n<0) x=1/x;
+        long long ex=labs(n);
+        while(ex>1)
+        {
+            if(ex%2) res*=x;
+            x=x*x;
+            ex/=2;
+        }
+        res*=x;
+        return res;
+    }
+};
+# result: beat 5%
+
+# 2. recursive solution
+# n&1 等价于 n%2==1, 单个&是按位与的意思
+class Solution {
+public:
+    double positivePow(double x, int n) {
+        if (n == 0) {
+            return 1.0;
+        }
+        if (n == 1) {
+            return x;
+        }
+        const double t = positivePow(x, n / 2);
+        return (n & 1) ? t * t * x : t * t;
+    }
+    
+    double myPow(double x, int n) {
+        return (n < 0) ? 1.0 / positivePow(x, n * -1) : positivePow(x, n);
+    }
+};
