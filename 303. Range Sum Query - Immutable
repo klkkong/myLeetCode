@@ -1,0 +1,39 @@
+# easy, dynamic programming
+# 本题需要写一个构造函数与一个成员函数：给出两个下标，计算出这段的和
+
+# 1. my accepted solution
+# 与动态规划无关
+class NumArray {
+public:
+    vector<int> num;
+    NumArray(vector<int> nums) {
+        num=nums;
+    }
+    
+    int sumRange(int i, int j) {
+        int sum=0;
+        for(int k=i;k<=j;k++)
+            sum+=num[k];
+        return sum;
+    }
+};
+# result: beat 8%
+
+# 2. good solution
+# prefixSum是累加和
+class NumArray {
+public:
+    NumArray(vector<int> nums) {
+        prefixSum.resize(nums.size());
+        for(int i = 0; i < nums.size(); ++i) {
+            prefixSum[i] = (i==0?0:prefixSum[i-1]) + nums[i];
+        }
+    }
+    
+    int sumRange(int i, int j) {
+        return prefixSum[j] - (i==0?0:prefixSum[i-1]);
+    }
+    
+private:
+    vector<int> prefixSum;
+};
