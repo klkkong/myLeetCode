@@ -1,5 +1,6 @@
 # medium, binary search, divide and conquer
 
+# 1. my accepted solution
 # 思路：每行和每列都是递增，只遍历第一行，每遍历一个元素（即matrix[0][i]），如果小于target，就对该列进行binary search，否则，target一定不存在
 class Solution {
 public:
@@ -36,3 +37,25 @@ public:
     }
 };
 # result: beat 13%
+
+# 2. good Java solution
+# 思路：从最后一列的第一个元素开始，如果target < matrix[row][col]，则可排除该列；反之则排除该行
+public class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if(matrix == null || matrix.length < 1 || matrix[0].length <1) {
+            return false;
+        }
+        int col = matrix[0].length-1;
+        int row = 0;
+        while(col >= 0 && row <= matrix.length-1) {
+            if(target == matrix[row][col]) {
+                return true;
+            } else if(target < matrix[row][col]) {
+                col--;
+            } else if(target > matrix[row][col]) {
+                row++;
+            }
+        }
+        return false;
+    }
+}
