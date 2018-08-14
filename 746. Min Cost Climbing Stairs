@@ -1,0 +1,35 @@
+# easy, dynamic programming
+
+# 1. accepted solution
+# 思路：与robber house不同，要灵活一些
+# dp[i] is the minimum cost to reach the i-th stair. Base case: dp[0]=cost[0]; dp[1]=cost[1];
+# 所以说，dp是到达i号台阶的最小花费，不像小偷一样，可以选择偷和不偷
+class Solution {
+public:
+    int minCostClimbingStairs(vector<int>& cost) {
+        vector<int> dp(cost.size(),0);
+        dp[0]=cost[0];dp[1]=cost[1];
+        int i;
+        for(i=2;i<cost.size();i++)
+        {
+            dp[i]=min(dp[i-1],dp[i-2])+cost[i];
+        }
+        return min(dp[i-1],dp[i-2]);
+    }
+};
+# result: beat 100%
+
+# 2. good recursive solution
+class Solution {
+public:
+    int minCostClimbingStairs(vector<int>& cost) {
+        return helper(cost, cost.size());
+    }
+private:
+    unordered_map<int,int> memo;
+    int helper(vector<int>& c, int n){
+        if (memo.count(n)) return memo[n];
+        if (n<=1) return memo[n]=c[n];
+        return memo[n]=(n==c.size() ? 0 : c[n])+min(go(c,n-2),go(c,n-1));
+    }
+};
