@@ -1,0 +1,47 @@
+# easy, backtracking
+# A binary watch has 4 LEDs on the top which represent the hours (0-11), and the 6 LEDs on the bottom represent the minutes (0-59).
+
+# 1. my solution: permutation(dfs)
+class Solution {
+public:
+    vector<string> res;
+    
+    string translation(vector<int> &arr,int num) {
+        int h=0,m=0;
+        for(int i=0;i<num;i++)
+        {
+            if(arr[i]<4)
+                h+=pow(2,arr[i]);
+            else
+                m+=pow(2,arr[i]-4);
+        }
+        if(h>11 || m>59) return "";
+        return (m>=10)?(to_string(h)+":"+to_string(m)):(to_string(h)+":"+"0"+to_string(m));
+    }
+    
+    void permutation(vector<int> &arr,int index,int num,int size) {
+        if(index==num)
+        {
+            string tmp=translation(arr,num);
+            if(find(res.begin(),res.end(),tmp)==res.end() && tmp!="")
+                res.push_back(tmp);            
+        }
+        else
+        {
+            for(int i=index;i<size;i++)
+            {
+                swap(arr[i],arr[index]);
+                permutation(arr,index+1,num,size);
+                swap(arr[i],arr[index]);
+            }
+        }
+    }
+    
+    vector<string> readBinaryWatch(int num) {
+        vector<int> arr(10);
+        for(int i=0;i<10;i++)
+            arr[i]=i;
+        permutation(arr,0,num,10);
+        return res;
+    }
+};
