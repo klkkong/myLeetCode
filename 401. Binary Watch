@@ -1,7 +1,12 @@
-# easy, backtracking
+# easy, backtracking, bit manipulation
 # A binary watch has 4 LEDs on the top which represent the hours (0-11), and the 6 LEDs on the bottom represent the minutes (0-59).
 
-# 1. my solution: permutation(dfs)
+# 1. my accepted solution: permutation(dfs)
+# 思路：10个点代表10个数字，0-9，取num个数字做无重复全排列，然后通过translation函数将数字翻译为时间。其中的一个细节是，当num>8时，无时间
+# 排列：从6个颜色里取4个颜色，进行排列，A46=6!/(6-4)!=360，A=Arrangement(也称为permutation)
+# 组合：从6个颜色里取4个颜色，有多少种组合？C46=A46/4!，C=Combination
+# 排列与组合的区别：不同的顺序是不同的排列
+# 在本题中，应该用组合，即C(num,10)
 class Solution {
 public:
     vector<string> res;
@@ -38,10 +43,32 @@ public:
     }
     
     vector<string> readBinaryWatch(int num) {
+        if(num>8) return res;
         vector<int> arr(10);
         for(int i=0;i<10;i++)
             arr[i]=i;
         permutation(arr,0,num,10);
+        return res;
+    }
+};
+# result: runtime 1476 ms, beat 0%
+
+# 2. good solution
+# <<左移相当于乘以2；>>右移相当于除以2
+# bitset<10>，声明一个只有10位的bitset
+# bitset.count()：返回bitset中1的位数
+# 这个算法非常巧妙，它将所有的时间转化为bitset，如果其中1的个数等于num，则这是一个答案。而我的思路是从灯推出时间，它是逆向思维，从时间推出灯的个数
+class Solution {
+public:
+    vector<string> readBinaryWatch(int num) {
+        vector<string> res;
+        for (int h = 0; h < 12; ++h) {
+            for (int m = 0; m < 60; ++m) {
+                if (bitset<10>((h << 6) + m).count() == num) {
+                    res.push_back(to_string(h) + (m < 10 ? ":0" : ":") + to_string(m));
+                }
+            }
+        }
         return res;
     }
 };
