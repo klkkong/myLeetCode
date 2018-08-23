@@ -1,0 +1,29 @@
+# medium, backtracking
+
+# accepted solution---对一个序列做全排列的标准答案
+class Solution {
+public:
+    void helper(vector<int>& nums,int index,vector<vector<int>>& res) {
+        if(index==nums.size())
+        {
+            res.push_back(nums);
+            return;
+        }
+        for(int i=index;i<nums.size();i++)
+        {
+            swap(nums[i],nums[index]);
+            helper(nums,index+1,res);
+            swap(nums[i],nums[index]);
+        }
+    }
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> res;
+        if(nums.size()<2)
+        {
+            res.push_back(nums);
+            return res;
+        }
+        helper(nums,0,res);
+        return res;
+    }
+};
