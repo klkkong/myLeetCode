@@ -1,8 +1,9 @@
 # DP, easy
 
-# 1. my solution
-# 每个值和最小值比较，更新最小值；每个值再和最小值相减得到profit,更新max profit
-# 这也符合DP的思想：中间某个状态，即第i天的max profit = max(dp[i-1],prices[i]-minv)
+## 1. my solution
+每个值和最小值比较，更新最小值；每个值再和最小值相减得到profit,更新max profit
+这也符合DP的思想：中间某个状态，即第i天的max profit = max(dp[i-1],prices[i]-minv)
+```
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
@@ -18,8 +19,10 @@ public:
         return res;
     }
 };
+```
 
-# 2. DP solution
+## 2. DP solution
+```
 int maxProfit(int[] prices) {
     if (prices.length == 0) return 0;
     int[] dp = new int[prices.length];
@@ -30,3 +33,4 @@ int maxProfit(int[] prices) {
     }
     return dp[dp.length - 1];
 }
+```
